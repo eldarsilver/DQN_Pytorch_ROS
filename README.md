@@ -200,7 +200,7 @@ Each time a new Linux Terminal is opened, you should activate the Python virtual
    source $HOME/python3_ws/devel/setup.bash
 ```
 
-### Train DQN to solve Maze environment
+## TRAIN DQN TO SOLVE MAZE ENVIRONMENT
 
 Once Python and ROS environments have been loaded, you can train a model using Deep Q Learning algorithm so a virtual Turtlebot learns to navigate through a Maze environment rendered by OpenAI Gym and Gazebo, launching the following command:
 ```
@@ -213,16 +213,16 @@ The way to launch Tensorboard will be:
 ```
 The ROS launch file `$HOME/python3_ws/src/turtle2_openai_ros_example/launch/start_training_maze_v2_dqn.launch` will call the script `$HOME/python3_ws/src/turtle2_openai_ros_example/src/deepq.py`.
 
-### Deploy the trained model in a real world scenario using physical Turtlebot
+## DEPLOY THE TRAINED MODEL IN A REAL WORLD SCENARIO USING PHYSICAL TURTLEBOT
 
 In this step, we will have to consider 2 machines: 
 1. The Turtlebot side that will have a Intel NUC i7 processor, a Kobuki mobile platform and a RPLidar A1 version.
 2. The laptop side where the trained model and the deploy script are stored.
 Both of them will have to be reachable through the network.
 
-#### Turtlebot side
+### Turtlebot side
 
-##### Prerequisites
+#### Prerequisites
 
 The Intel NUC i7 processor will have Ubuntu 16.04 as OS and you sill have to install ROS Kinetic. Once you have done that, it will be necessary to install and compile the ROS package called `rplidar_ros`. To achive that, you have to execute the following commands in a Terminal of the Intel NUC:
 ```
@@ -244,7 +244,7 @@ Once you have change the USB port remap, you can change the launch file of `rpli
 <param name="serial_port" type="string" value="/dev/rplidar"/>
 ```
 
-##### Launching `roscore` and `rplidar_ros` packages
+#### Launching `roscore` and `rplidar_ros` packages
 
 At this point, all the required software is installed in the Intel NUC (the processor of the robot). You will have to open 2 Linux Terminals to launch the ROS Master node `roscore` and the lidar package called `rplidar_ros`. As this machine will execute the ROS Master node, it will be necessary to specify the IP of this workstation in the  the ROS environment variable `ROS_IP`.
 1. Terminal 1:
@@ -260,7 +260,7 @@ export ROS_IP=<IP_Turtlebot>
 roslaunch rplidar_ros rplidar.launch
 ```
 
-#### Laptop side
+### Laptop side
 
 In this side you are going to launch the deploy script which will load the trained model to predict the next action using the state captured by the physical RPLidar A1. 
 The way to allow that this machine is connected with the ROS Maste node in the Turtlebot and can subscribe to the topic where the RPLidar is publishing its captured data will be setting the `ROS_MASTER_URI` variable environment with the IP of the Intel NUC and the `ROS_IP` with the IP of this laptop.
