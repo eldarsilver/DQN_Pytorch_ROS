@@ -1,0 +1,11 @@
+pip install pyaml
+pip install rospkg
+pip install empy
+pip install gym
+pip install numpy
+pip install defusedxml
+pip install gitpython
+pip install torch 
+pip install torchvision
+pip install tensorboard
+

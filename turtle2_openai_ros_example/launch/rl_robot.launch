@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<launch>
+  <node name="rl_ros" pkg="turtle2_openai_ros_example" type="deploy_robot.py" output="screen">
+    <rosparam command="load" file="$(find turtle2_openai_ros_example)/launch/rl_robot_params.yaml"/>
+  </node>
+</launch>
