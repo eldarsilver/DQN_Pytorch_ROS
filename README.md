@@ -191,7 +191,7 @@ After that, permissions will be granted to `python3_ws/src` folder:
    chmod 777 -R python3_ws/src/
 ```
 
-### Load Python and ROS environments
+## LOAD PYTHON AND ROS ENVIRONMENTS
 
 Each time a new Linux Terminal is opened, you should activate the Python virtual environment and load the ROS configuration scripts with these commands:
 ```
