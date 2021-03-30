@@ -253,11 +253,17 @@ The way to launch Tensorboard will be:
 ```
 The ROS launch file `$HOME/python3_ws/src/turtle2_openai_ros_example/launch/start_training_maze_v2_dqn.launch` will call the script `$HOME/python3_ws/src/turtle2_openai_ros_example/src/deepq.py`.
 
-The script `deepq.py` is going to train a Deep Q Learning algorithm and to achive that it uses a Policy Network and a Target Network. 
+The script `deepq.py` is going to train a Deep Q Learning algorithm and to achive that it uses a Policy Network _Q_ and a Target Network _Q'_. 
 
 Both Neural Networks will share the same topology, that will be a Multi Layer Perceptron. The input will be a state captured by the lidar that will be discretized (5 values for each reading by default) and the output will correspond to the possible actions (3 by default).
 
-The Policy Network will be updated each step 
+The Policy Network _Q_ will be updated each step with the following rule:
+```
+$$Q(s_{t}, a_{t}) \leftarrow Q(s_{t}, a_{t}) + \alpha * (R_{t+1} + \max_{a' \in A} Q'(s_{t+1}, a') - Q(s_{t}, a_{t})$$
+```
+
+The Target Network _Q'_ will copy the weights of the Policy Network _Q_ periodically (we do that in the code each `target_update` steps which is configurable. It is set to 1000 steps.
+
 
 This script is going to use the following settings:
 ```
@@ -330,7 +336,7 @@ roslaunch rplidar_ros rplidar.launch
 ### Laptop side
 
 In this side you are going to launch the deploy script which will load the trained model to predict the next action using the state captured by the physical RPLidar A1. 
-The way to allow that this machine is connected with the ROS Maste node in the Turtlebot and can subscribe to the topic where the RPLidar is publishing its captured data will be setting the `ROS_MASTER_URI` variable environment with the IP of the Intel NUC and the `ROS_IP` with the IP of this laptop.
+The way to allow that this machine is connected with the ROS Master node in the Turtlebot and can subscribe to the topic where the RPLidar is publishing its captured data will be setting the `ROS_MASTER_URI` variable environment with the IP of the Intel NUC and the `ROS_IP` with the IP of this laptop.
 ```
    source $HOME/python3_ws/py3envros/bin/activate
    source /opt/ros/kinetic/setup.bash
