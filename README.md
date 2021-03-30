@@ -259,10 +259,10 @@ Both Neural Networks will share the same topology, that will be a Multi Layer Pe
 
 The Policy Network _Q_ will be updated each step with the following rule:
 ```
-$$Q(s_{t}, a_{t}) \leftarrow Q(s_{t}, a_{t}) + \alpha * (R_{t+1} + \max_{a' \in A} Q'(s_{t+1}, a') - Q(s_{t}, a_{t})$$
+$Q(s_{t}, a_{t}) \leftarrow Q(s_{t}, a_{t}) + \alpha * (R_{t+1} + \max_{a' \in A} Q'(s_{t+1}, a') - Q(s_{t}, a_{t})$
 ```
 
-The Target Network _Q'_ will copy the weights of the Policy Network _Q_ periodically (we do that in the code each `target_update` steps which is configurable. It is set to 1000 steps.
+The Target Network _Q'_ will copy the parameters of the Policy Network _Q_ periodically (we do that in the code each `target_update` steps which is configurable). It is set to 1000 steps by default.
 
 
 This script is going to use the following settings:
