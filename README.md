@@ -19,7 +19,7 @@ The task to solve is to learn a policy so the robot isn't closer than a configur
 min_range: 0.2 # Minimum meters below wich we consider we have crashed
 ```
 
-The actions will be: move forward, turn righ and turn left. These discretized actions will be translated in physical movements in the robot. These settings can be found in the same configuration file called `$HOME/python3_ws/src/openai_ros/openai_ros/src/openai_ros/task_envs/turtlebot2/config/turtlebot2_maze.yaml`. An example of these values is:
+The actions will be: move forward (`action = 0`), turn left (`action = 1`) and turn right (`action = 2`). These discretized actions will be translated in physical movements in the robot. These settings can be found in the same configuration file called `$HOME/python3_ws/src/openai_ros/openai_ros/src/openai_ros/task_envs/turtlebot2/config/turtlebot2_maze.yaml`. An example of these values is:
 ```
 linear_forward_speed: 0.5 # Spawned for ging fowards
 linear_turn_speed: 0.1 # Lienare speed when turning
