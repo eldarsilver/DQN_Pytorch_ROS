@@ -261,17 +261,18 @@ The Policy Network _Q_ will be updated each step with the following rule:
 ```
 $$Q(s_{t}, a_{t}) \leftarrow Q(s_{t}, a_{t}) + \alpha * (R_{t+1} + \max_{a' \in A} Q'(s_{t+1}, a') - Q(s_{t}, a_{t})$$
 ```
-```
+
 <a href="https://www.codecogs.com/eqnedit.php?latex=Q(s_{t},&space;a_{t})&space;\leftarrow&space;Q(s_{t},&space;a_{t})&space;&plus;&space;\alpha&space;*&space;(R_{t&plus;1}&space;&plus;&space;\max_{a'&space;\in&space;A}&space;Q'(s_{t&plus;1},&space;a')&space;-&space;Q(s_{t},&space;a_{t})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(s_{t},&space;a_{t})&space;\leftarrow&space;Q(s_{t},&space;a_{t})&space;&plus;&space;\alpha&space;*&space;(R_{t&plus;1}&space;&plus;&space;\max_{a'&space;\in&space;A}&space;Q'(s_{t&plus;1},&space;a')&space;-&space;Q(s_{t},&space;a_{t})" title="Q(s_{t}, a_{t}) \leftarrow Q(s_{t}, a_{t}) + \alpha * (R_{t+1} + \max_{a' \in A} Q'(s_{t+1}, a') - Q(s_{t}, a_{t})" /></a>
-```
+
 
 The Target Network _Q'_ will copy the parameters of the Policy Network _Q_ periodically (we do that in the code each `target_update` steps which is configurable). It is set to 1000 steps by default.
 
 The Loss function to optimize using gradient descent is:
 ```
-
+$$L(w_{i}) = \mathbb{E}_{s_{t}, a_{t}, r_{t}, s_{t+1}}[(r_{t} + \gamma * \max_{a' \in A} Q'(s_{t+1}, a') - Q(s_{t}, a_{t}))^2]$$
 ```
 
+<a href="https://www.codecogs.com/eqnedit.php?latex=L(w_{i})&space;=&space;\mathbb{E}_{s_{t},&space;a_{t},&space;r_{t},&space;s_{t&plus;1}}[(r_{t}&space;&plus;&space;\gamma&space;*&space;\max_{a'&space;\in&space;A}&space;Q'(s_{t&plus;1},&space;a')&space;-&space;Q(s_{t},&space;a_{t}))^2]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?L(w_{i})&space;=&space;\mathbb{E}_{s_{t},&space;a_{t},&space;r_{t},&space;s_{t&plus;1}}[(r_{t}&space;&plus;&space;\gamma&space;*&space;\max_{a'&space;\in&space;A}&space;Q'(s_{t&plus;1},&space;a')&space;-&space;Q(s_{t},&space;a_{t}))^2]" title="L(w_{i}) = \mathbb{E}_{s_{t}, a_{t}, r_{t}, s_{t+1}}[(r_{t} + \gamma * \max_{a' \in A} Q'(s_{t+1}, a') - Q(s_{t}, a_{t}))^2]" /></a>
 
 This script is going to use the following settings:
 ```
