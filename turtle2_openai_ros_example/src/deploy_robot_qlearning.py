@@ -61,14 +61,9 @@ class rlComponent(object):
         self.max_laser_value = rospy.get_param('~max_laser_value')
         self.min_laser_value = rospy.get_param('~min_laser_value')
 
-        MODEL_CKPT = rospy.get_param('~model_ckpt')
-
 
         self.actions = range(number_actions)
 
-        self.device = torch.device('gpu' if torch.cuda.is_available() else 'cpu')
-
-        self.policy = torch.load_state_dict(torch.load(MODEL_CKPT))
 
         self._cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
         self.last_action = "FORWARDS"
@@ -278,8 +273,8 @@ class rlComponent(object):
         rospy.loginfo('back data.ranges[0] %s' % data.ranges[0])
         rospy.loginfo('front data.ranges[179] %s' % data.ranges[179])
 
-        
-        idx_ranges = [89, 135, 179, 224, 269]
+        #idx_ranges = [0, 89, 179, 269]
+        idx_ranges = [0, 44, 89, 144, 179, 224, 269, 314]
 
         for item in idx_ranges:
             if data.ranges[item] == float('Inf') or numpy.isinf(data.ranges[item]):
@@ -431,7 +426,7 @@ class rlComponent(object):
             linear_speed = self.linear_turn_speed
             angular_speed = -1*self.angular_speed
             self.last_action = "TURN_RIGHT"
-        elif self._episode_done == True: # Stop
+        elif action == 3: # Stop
             linear_speed = 0.0
             angular_speed = 0.0
             self.last_action = "STOP"
@@ -449,39 +444,49 @@ class rlComponent(object):
 
 
 
-    
-    def select_action(policy, state):
-        #rospy.logwarn("state.shape: ")
-        #rospy.logwarn(state.shape)
-        with torch.no_grad():
-            # t.max(1) will return largest column value of each row.
-            # second column on max result is index of where max element was
-            # found, so we pick action with the larger expected reward.
-            policy.eval()
-            action = policy(state).max(axis=1)[1].view(1, 1)
-        return action
 
+    def chooseAction(self, state):
+        qv = [self.q[(state, a)] for a in self.actions if (state, a) in self.q]
+        if len(qv) > 0:
+            maxQ = max(qv)
+            count = qv.count(maxQ)
+            # In case there're several state-action max values 
+            # we select a random one among them
+            if count > 1:
+                #best = [i for i in range(len(self.actions)) if qv[i] == maxQ]
+                best = [i for i in range(len(qv)) if qv[i] == maxQ]
+                i = random.choice(best)
+            else:
+                i = qv.index(maxQ)
+
+            action = self.actions[i]
+        else:
+            action = -1    
+        return action
 
 
 
     def step(self):
         obs = self._get_obs()
         rospy.loginfo("obs %s" % obs)
-        while obs != [] and self._episode_done == False:
-            state = torch.from_numpy(np.array(obs)).float().unsqueeze(0).to(self.device)
+        while obs != [] and self.last_action != "STOP":
+            state = ''.join(map(str, obs))
             rospy.loginfo('state %s' % state)
             # Pick an action based on the current state
             #action = qlearn.chooseAction(state)
-            action_dq = self.select_action(self.policy, state)
-            if obs[2] < 0.2: # 180 front
-                if obs[1] < 0.2: # 120 right
+            actionq = self.chooseAction(state)
+            if obs[2] < 1: # 180 front
+                if obs[1] < 1: # 120 right
+                    if obs[3] < 1: # 240 left
+                        action = 3 # stop
+                    else:
                         action = 1 # left
                 else:
                     action = 2 # right  
             else:
                 action = 0 # front   
             rospy.logwarn("Next action is:%d", action)
-            rospy.logwarn("Next actionq is:%d", action_dq)
+            rospy.logwarn("Next actionq is:%d", actionq)
             # Execute the action in the environment and get feedback
             self._set_action(action)
             obs = self._get_obs()

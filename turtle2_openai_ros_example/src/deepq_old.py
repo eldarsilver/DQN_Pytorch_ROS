@@ -27,7 +27,6 @@ import io
 import base64
 from memory import ReplayMemory
 import datetime
-import json
 
 
 
@@ -80,7 +79,6 @@ def select_action(policy, state, device, env, eps_greedy_threshold, n_actions):
     rospy.logwarn("eps_greedy_threshold: " + str(eps_greedy_threshold))
     if random.random() > eps_greedy_threshold:
         rospy.logwarn("Entering select action random.random() > eps_greedy_threshold...")
-        policy_used = True
         #rospy.logwarn("state.shape: ")
         #rospy.logwarn(state.shape)
         #rospy.logwarn("n_actions Env.action_space.n%d", n_actions)
@@ -90,16 +88,11 @@ def select_action(policy, state, device, env, eps_greedy_threshold, n_actions):
             # found, so we pick action with the larger expected reward.
             policy.eval()
             action = policy(state).max(1)[1].view(1, 1)
-            policy_act = action
             policy.train()
     else:
         rospy.logwarn("Entering select action random.random() < eps_greedy_threshold...")
-        policy_used = False
         action = torch.tensor([[random.randrange(n_actions)]], device=device, dtype=torch.long)
-        with torch.no_grad():
-            policy.eval()
-            policy_act = policy(state).max(axis=1)[1].view(1, 1)
-    return action, policy_act, policy_used
+    return action
 
 
 def train(policy_net, target_net, optimizer, scheduler, memory, batch_size, gamma, device, env):
@@ -159,7 +152,7 @@ def train(policy_net, target_net, optimizer, scheduler, memory, batch_size, gamm
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-    scheduler.step()
+    #scheduler.step()
     for name, weight in policy_net.named_parameters():
         """
         print("\nname: ")
@@ -181,7 +174,7 @@ def test(env, policy_net, device, test_global_step, render=False):
         if render:
             env.render()
         state = torch.from_numpy(np.array(state)).float().unsqueeze(0).to(device)
-        action, policy_act, policy_used  = select_action(policy_net, state, device, env, eps_greedy_threshold=0., n_actions=1)
+        action = select_action(policy_net, state, device, env, eps_greedy_threshold=0., n_actions=1)
         state, reward, done, _ = env.step(action.item())
         test_local_step += 1
         test_global_step += 1
@@ -268,15 +261,11 @@ if __name__ == '__main__':
     target_net.eval()
 
     optimizer = torch.optim.Adam(policy_net.parameters(), lr=lr)
-    # Decays the learning rate of each parameter group by gamma every step_size epochs. Notice that such decay can happen simultaneously with other changes to the learning rate from outside this scheduler. When last_epoch=-1, sets initial lr as lr.
-    #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size= 5, gamma=0.9)
-
-    scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=0.01, total_steps=int(num_steps))
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size= 5, gamma=0.9)
     memory = ReplayMemory(10000)
 
     logdir = os.path.join("/home/eldar/python3_ws/src/turtle2_openai_ros_example/src/logs", datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     writer = SummaryWriter(log_dir=logdir)
-    tracedir = "/home/eldar/python3_ws/src/turtle2_openai_ros_example/src/trace"
 
     print("Target reward: {}".format(env.spec.reward_threshold))
     step_count = 0
@@ -287,7 +276,6 @@ if __name__ == '__main__':
         # Initialize the environment and state
         # type(state): <class 'list'>
         state, done = env.reset(), False
-        list_state = state
         #print("\n type(state): ")
         #print(type(state))
         rospy.logwarn("# state we are => " + str(state))
@@ -297,12 +285,11 @@ if __name__ == '__main__':
             rospy.logwarn("step_count: " + str(step_count))
             # Select an action
             eps_greedy_threshold = compute_eps_threshold(step_count, eps_start, eps_end, eps_decay)
-            action, policy_act, policy_used = select_action(policy_net, state, device, env, eps_greedy_threshold, n_actions)
+            action = select_action(policy_net, state, device, env, eps_greedy_threshold, n_actions)
             rospy.logwarn("Next action is:%d", action)
 
             # Perform action in env
             next_state, reward, done, _ = env.step(action.item())
-            list_next_state = next_state
             #rospy.logwarn(str(next_state) + " " + str(reward))
 
             # Bookkeeping
@@ -314,7 +301,6 @@ if __name__ == '__main__':
 
             # Store the transition in memory
             memory.push(state, action, next_state, reward)
-            memory.push_trace(i_episode, step_count, list_state, action.item(), list_next_state, reward.item(), policy_act.item(), eps_greedy_threshold, policy_used)
 
             """
             # Make the algorithm learn based on the results
@@ -327,7 +313,6 @@ if __name__ == '__main__':
 
             # Move to the next state
             state = next_state
-            list_state = list_next_state
 
             # Perform one step of the optimization (on the policy network)
             train(policy_net, target_net, optimizer, scheduler, memory, batch_size, gamma, device, env)
@@ -343,10 +328,6 @@ if __name__ == '__main__':
                 if not os.path.exists('checkpoints'):
                     os.makedirs('checkpoints')
                 torch.save(policy_net.state_dict(), '/home/eldar/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-episode-{0}-step-{1}.pt'.format(str(i_episode), str(step_count)))
-                fname = datetime.datetime.now().strftime("%Y_%m_%d-%H:%M:%S") + ".json"
-                list_namedtuple = memory.get_memtrace()
-                with open(os.path.join(tracedir, fname), 'w') as f:
-                    json.dump([elem._asdict() for elem in list_namedtuple[-1000:-1]], f)
                 #torch.save(policy_net.state_dict(), '/home/eldar/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-{}.pt'.format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S")))
 
         i_episode += 1
