@@ -67,12 +67,9 @@ The following commands will be executed to install ROS Kinetic inside the virtua
    sudo apt-get update
    sudo apt-get install ros-kinetic-desktop-full
    sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
-   sudo apt install python-rosdep
    sudo rosdep init
-   source /opt/ros/kinetic/setup.bash
-   sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
-   sudo apt install python-rosdep
-   sudo apt-get install rospkg    
+   sudo apt-get install rospkg
+   source /opt/ros/kinetic/setup.bash     
 ```
 
 ### Clone this repository 
