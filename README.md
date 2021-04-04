@@ -296,6 +296,23 @@ The equation to compute the epsilon-greedy tradeoff will be:
 eps_end + (eps_start - eps_end) * math.exp(-1. * step / eps_decay)
 ```
 
+## TEST THE TRAINED MODEL IN THE OPENAI GYM AND GAZEBO ENVIRONMENT
+
+Once the model has been trained, you can test it in the Maze environment offered by OpenAI Gym and Gazebo executing the following ROS node:
+```
+roslaunch turtle2_openai_ros_example start_test_maze_v2_dqn.launch
+```
+The Maze enviroment with the Turtlebot virtual agent will be shown through the Gazebo simulator. It's an intuitive and visual way to show the behavior of the policy.
+
+The launch file `start_test_maze_v2_dqn.launch` calls the script `$HOME/python3_ws/src/turtle2_openai_ros_example/src/test_deepq.py` which loads the parameters of the trained policy network and runs a number `n_epochs` of testing epochs. The relevant configurable parameters are:
+```
+MODEL_PATH = '$HOME/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-final-episode-2671-step-110007.pt'
+n_epochs = 20
+logdir = os.path.join("$HOME/python3_ws/src/turtle2_openai_ros_example/src/logs", datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+writer = SummaryWriter(log_dir=logdir)
+```
+The cumulative reward of the `n_epochs` testing epochs is tracked in the `logdir` events file and it can be inspected using Tensorboard.
+
 
 ## DEPLOY THE TRAINED MODEL IN A REAL WORLD SCENARIO USING PHYSICAL TURTLEBOT
 
