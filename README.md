@@ -304,7 +304,7 @@ roslaunch turtle2_openai_ros_example start_test_maze_v2_dqn.launch
 ```
 The Maze enviroment with the Turtlebot virtual agent will be shown through the Gazebo simulator. It's an intuitive and visual way to show the behavior of the policy.
 
-The launch file `start_test_maze_v2_dqn.launch` calls the script `$HOME/python3_ws/src/turtle2_openai_ros_example/src/test_deepq.py` which loads the parameters of the trained policy network and runs a number `n_epochs` of testing epochs. The relevant configurable parameters are:
+The launch file `$HOME/python3_ws/src/turtle2_openai_ros_example/launch/start_test_maze_v2_dqn.launch` calls the script `$HOME/python3_ws/src/turtle2_openai_ros_example/src/test_deepq.py` which loads the parameters of the trained policy network and runs a number `n_epochs` of testing epochs. The relevant configurable parameters are:
 ```
 MODEL_PATH = '$HOME/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-final-episode-2671-step-110007.pt'
 n_epochs = 20
