@@ -1,12 +1,19 @@
+<<<<<<< HEAD
 pyyaml
 rospkg
 empy
 scipy
+=======
+pyaml
+rospkg
+empy
+>>>>>>> b3a1aa67d27c8b90da10566aee092f7224dd4316
 gym
 numpy
 defusedxml
 gitpython
 torch 
+<<<<<<< HEAD
 Pillow
 torchvision
 grpcio
@@ -14,4 +21,8 @@ tensorboard
 catkin_pkg
 netifaces
 matplotlib
+=======
+torchvision
+tensorboard
+>>>>>>> b3a1aa67d27c8b90da10566aee092f7224dd4316
 
