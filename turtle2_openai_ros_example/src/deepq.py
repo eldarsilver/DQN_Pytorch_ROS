@@ -189,9 +189,9 @@ def test(env, policy_net, device, test_global_step, render=False):
         rospy.logwarn(reward)
         #writer.add_scalar("Test_step_Reward", reward, global_step=test_local_step)
         ep_reward += reward
-        rospy.logwarn("Testing: Cummulative Reward of this episode: ")
+        rospy.logwarn("Testing: Cumulative Reward of this episode: ")
         rospy.logwarn(ep_reward)
-        writer.add_scalar("Test_Cummulative_Rewards", ep_reward, global_step=test_global_step)
+        writer.add_scalar("Test_Cumulative_Rewards", ep_reward, global_step=test_global_step)
     return ep_reward, test_global_step
 
 
@@ -274,9 +274,16 @@ if __name__ == '__main__':
     scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=0.01, total_steps=int(num_steps))
     memory = ReplayMemory(10000)
 
-    logdir = os.path.join("/home/eldar/python3_ws/src/turtle2_openai_ros_example/src/logs", datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+
+    ############################################################################
+    #logdir = os.path.join("$HOME/python3_ws/src/turtle2_openai_ros_example/src/logs", datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+    basedir = os.path.dirname(__file__)
+    basedirpathlogs = os.path.join(basedir, "logs")
+    logdir = os.path.join(basedirpathlogs, datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     writer = SummaryWriter(log_dir=logdir)
-    tracedir = "/home/eldar/python3_ws/src/turtle2_openai_ros_example/src/trace"
+    #tracedir = "$HOME/python3_ws/src/turtle2_openai_ros_example/src/trace"
+    tracedir = os.path.join(basedir, "trace")
+    ############################################################################
 
     print("Target reward: {}".format(env.spec.reward_threshold))
     step_count = 0
@@ -287,6 +294,7 @@ if __name__ == '__main__':
         # Initialize the environment and state
         # type(state): <class 'list'>
         state, done = env.reset(), False
+        state = [round(num, 1) for num in state]
         list_state = state
         #print("\n type(state): ")
         #print(type(state))
@@ -302,6 +310,7 @@ if __name__ == '__main__':
 
             # Perform action in env
             next_state, reward, done, _ = env.step(action.item())
+            next_state = [round(num, 1) for num in next_state]
             list_next_state = next_state
             #rospy.logwarn(str(next_state) + " " + str(reward))
 
@@ -342,7 +351,12 @@ if __name__ == '__main__':
                 target_net.load_state_dict(policy_net.state_dict())
                 if not os.path.exists('checkpoints'):
                     os.makedirs('checkpoints')
-                torch.save(policy_net.state_dict(), '/home/eldar/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-episode-{0}-step-{1}.pt'.format(str(i_episode), str(step_count)))
+                #############################################################################################################
+                #torch.save(policy_net.state_dict(), '$HOME/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-episode-{0}-step-{1}.pt'.format(str(i_episode), str(step_count)))
+                model_dir = os.path.dirname(__file__)
+                MODEL_PATH = os.path.join(model_dir, 'checkpoints/dqn-episode-{0}-step-{1}.pt'.format(str(i_episode), str(step_count)))
+                torch.save(policy_net.state_dict(), MODEL_PATH)
+                #torch.save(policy_net.state_dict(), 'checkpoints/dqn-episode-{0}-step-{1}.pt'.format(str(i_episode), str(step_count)))
                 fname = datetime.datetime.now().strftime("%Y_%m_%d-%H:%M:%S") + ".json"
                 list_namedtuple = memory.get_memtrace()
                 with open(os.path.join(tracedir, fname), 'w') as f:
@@ -362,9 +376,7 @@ if __name__ == '__main__':
             """
             writer.add_histogram(name, weight, step_count)
             #writer.add_histogram('grad', weight.grad, step_count)
-
-        if i_episode == 700:
-            torch.save(policy_net.state_dict(), '/home/eldar/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-episode-700.pt')
+        
 
 
         # Evaluate greedy policy
@@ -381,7 +393,12 @@ if __name__ == '__main__':
     if not os.path.exists('checkpoints'):
         os.makedirs('checkpoints')
     str_i_episode = str(i_episode)
-    torch.save(policy_net.state_dict(), '/home/eldar/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-final-episode-{0}-step-{1}.pt'.format(str_i_episode, str(step_count)))
+    #######################################################################################
+    #torch.save(policy_net.state_dict(), '$HOME/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-final-episode-{0}-step-{1}.pt'.format(str_i_episode, str(step_count)))
+    model_dir = os.path.dirname(__file__)
+    MODEL_PATH = os.path.join(model_dir, 'checkpoints/dqn-episode-{0}-step-{1}.pt'.format(str(i_episode), str(step_count)))
+    torch.save(policy_net.state_dict(), MODEL_PATH)
+    
 
 
 

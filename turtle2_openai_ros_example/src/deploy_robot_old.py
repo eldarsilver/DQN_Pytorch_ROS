@@ -176,7 +176,9 @@ class rlComponent(object):
         discretized_ranges = self.laser_scan.ranges
         self.publish_filtered_laser_scan(laser_original_data=self.laser_scan,
                                          new_filtered_laser_range=discretized_ranges)
-
+        with open("/home/eldar/python3_ws/src/turtle2_openai_ros_example/src/qdictmid1.pkl","rb") as f:
+            self.q = pickle.load(f)
+            #rospy.logwarn("self.q %s" % str(self.q))
         self.step()
 
 
@@ -464,7 +466,6 @@ class rlComponent(object):
 
     def step(self):
         obs = self._get_obs()
-        obs = [round(num, 1) for num in obs]
         rospy.loginfo("obs %s" % obs)
         while obs != [] and self._episode_done == False:
             state = torch.from_numpy(np.array(obs)).float().unsqueeze(0).to(self.device)
@@ -484,7 +485,6 @@ class rlComponent(object):
             # Execute the action in the environment and get feedback
             self._set_action(action)
             obs = self._get_obs()
-            obs = [round(num, 1) for num in obs]
              
 
        
@@ -493,7 +493,7 @@ if __name__ == '__main__':
     try:
         rospy.init_node('re_fr', anonymous=False)
         rlComp = rlComponent()
-        #while rlComp.ok():
+        #while frComp.ok():
         #	pass
     except rospy.ROSInterruptException:
         pass
