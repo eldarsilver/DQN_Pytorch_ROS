@@ -298,6 +298,17 @@ The equation to compute the epsilon-greedy tradeoff will be:
 eps_end + (eps_start - eps_end) * math.exp(-1. * step / eps_decay)
 ```
 
+## TRACKING RESULTS 
+
+Tensorboard has been used as a tool to visualize relevant information related to the training and validation processes. To check the values of the Policy Neural Network's parameters and the gradients computed during Backpropagation, histograms will be shown.
+
+Periodically (`i_episode % log_interval == 0 or step_count >= num_steps`), the Policy Network will be evaluated calling the `test` method in `deepq.py`. In that function, an episode will be run using the Policy Network in eval mode and the cumulated rewards for this episode will be shown in Tensorboard and it will be possible to compare them with the cumulated rewards of previous epochs.
+
+The events files of Tensorboard will be stored in `$HOME/python3_ws/src/turtle2_openai_ros_example/src/logs/<YYYYMMDD-HHmmss>/` and they can be inspected
+
+
+
+
 ## TEST THE TRAINED MODEL IN THE OPENAI GYM AND GAZEBO ENVIRONMENT
 
 Once the model has been trained, you can test it in the Maze environment offered by OpenAI Gym and Gazebo executing the following ROS node:
@@ -319,7 +330,7 @@ The cumulative reward of the `n_epochs` testing epochs is tracked in the `logdir
 ## DEPLOY THE TRAINED MODEL IN A REAL WORLD SCENARIO USING PHYSICAL TURTLEBOT
 
 In this step, we will have to consider 2 machines: 
-1. The Turtlebot side that will have a Intel NUC i7 processor, a Kobuki mobile platform and a RPLidar A1 version.
+1. The Turtlebot side that will have an Intel NUC i7 processor, a Kobuki mobile platform and a RPLidar A1 version.
 2. The laptop side where the trained model and the deploy script are stored.
 Both of them will have to be reachable through the network.
 
@@ -327,7 +338,7 @@ Both of them will have to be reachable through the network.
 
 #### Prerequisites
 
-The Intel NUC i7 processor will have Ubuntu 16.04 as OS and you sill have to install ROS Kinetic. Once you have done that, it will be necessary to install and compile the ROS package called `rplidar_ros`. To achive that, you have to execute the following commands in a Terminal of the Intel NUC:
+The Intel NUC i7 processor will have Ubuntu 16.04 as OS and you will have to install ROS Kinetic. Once you have done that, it will be necessary to install and compile the ROS package called `rplidar_ros`. To achive that, you have to execute the following commands in a Terminal of the Intel NUC:
 ```
    mkdir -p $HOME/catkin_ws/src
    cd $HOME/catkin_ws/src/
