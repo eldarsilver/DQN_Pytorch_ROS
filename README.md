@@ -327,7 +327,12 @@ An example of this data structure is:
 [{"episode": 0, "step": 1, "st": [0.8, 1.1, 2.5, 1.1, 0.8], "act": 0, "next_st": [0.7, 1.1, 2.5, 1.1, 0.7], "rw": 5, "policy_act": 2, "epsi": 1.0, "policy_used": false}, {"episode": 0, "step": 2, "st": [0.7, 1.1, 2.5, 1.1, 0.7], "act": 1, "next_st": [0.7, 1.2, 2.4, 1.0, 0.7], "rw": 4, "policy_act": 2, "epsi": 0.9999887500703122, "policy_used": false}, ...]
 ```
 
-The content of this data structure will be exported to contiguous json files located at `$HOME/python3_ws/src/turtle2_openai_ros_example/src/trace/`, so each file will have `target_update` (1000 by default) tuples correspondig to this amount of steps and the next json file will store the following `target_update` tuples. We have done that so each file can be opened and visualized without memory issues.  
+The content of this data structure will be exported to contiguous json files located at:
+```
+$HOME/python3_ws/src/turtle2_openai_ros_example/src/trace/
+```
+
+So each file will have `target_update` (1000 by default) tuples correspondig to this amount of steps and the next json file will store the following `target_update` tuples. We have done that so each file can be opened and visualized without memory issues.  
 
 
 
