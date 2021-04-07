@@ -310,6 +310,7 @@ Besides that, as a way to gather more details, a Python `namedtuple` called `Tra
 ```
 self.Trace = namedtuple('Trace', ('episode', 'step', 'st', 'act', 'next_st', 'rw', 'policy_act', 'epsi', 'policy_used'))
 ```
+
 The description of these fields is:
 * `episode`: The number of the episode.
 * `step`: The number of the step of that episode.
@@ -319,12 +320,14 @@ The description of these fields is:
 * `rw`: It is the reward achieved taken the action `act` from the state `st`.
 * `policy_act`: It stores the action predicted by the Policy Network when it receives the state `st`. This field allows us to know what action the Policy Network would predict although the final action taken was a random action because of the epsilon-greedy trade-off.
 * `epsi`: It contains tha value of epsilon in the step `step` of the episode `episode`.
-* `policy_used`: It's a boolean value so if it's True the tha action taken in the step `step` of the episode `episode` was chosen by The Policy Network.
+* `policy_used`: It's a boolean value so if it's True the tha action taken in the step `step` of the episode `episode` was chosen by the Policy Network.
+
 An example of this data structure is:
 ```
 [{"episode": 0, "step": 1, "st": [0.8, 1.1, 2.5, 1.1, 0.8], "act": 0, "next_st": [0.7, 1.1, 2.5, 1.1, 0.7], "rw": 5, "policy_act": 2, "epsi": 1.0, "policy_used": false}, {"episode": 0, "step": 2, "st": [0.7, 1.1, 2.5, 1.1, 0.7], "act": 1, "next_st": [0.7, 1.2, 2.4, 1.0, 0.7], "rw": 4, "policy_act": 2, "epsi": 0.9999887500703122, "policy_used": false}, ...]
 ```
 
+The content of this data structure will be exported to contiguous json files located at `$HOME/python3_ws/src/turtle2_openai_ros_example/src/trace/`, so each file will have `target_update` (1000 by default) tuples correspondig to this amount of steps and the next json file will store the following `target_update` tuples. We have done that so each file can be opened and visualized without memory issues.  
 
 
 
