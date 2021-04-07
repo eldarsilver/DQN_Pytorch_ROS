@@ -332,7 +332,7 @@ The content of this data structure will be exported to contiguous json files loc
 $HOME/python3_ws/src/turtle2_openai_ros_example/src/trace/
 ```
 
-So each file will have `target_update` (1000 by default) tuples correspondig to this amount of steps and the next json file will store the following `target_update` tuples. We have done that so each file can be opened and visualized without memory issues.  
+So each file will have `target_update` (1000 by default) tuples corresponding to this amount of steps and the next json file will store the following `target_update` tuples. We have done that so each file can be opened and visualized without memory issues.  
 
 
 
