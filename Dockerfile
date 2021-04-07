@@ -83,7 +83,8 @@ RUN echo "source /opt/ros/kinetic/setup.bash" >> /root/.bashrc
 RUN /bin/bash -c "source /root/.bashrc"
 ENV PYTHONPATH=$PYTHONPATH:/usr/bin/python3.6
 RUN . /opt/ros/kinetic/setup.sh && catkin_make -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.6
-RUN /bin/bash -c "source /python3_ws/devel/setup.bash"
+RUN echo "source /python3_ws/devel/setup.bash" >> /root/.bashrc
+RUN /bin/bash -c "source /root/.bashrc"
 # Set Python3.6 as Python version by default
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
 RUN apt-get install -y x11vnc xvfb 
