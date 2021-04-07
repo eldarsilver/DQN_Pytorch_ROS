@@ -314,7 +314,16 @@ The description of these fields is:
 * `episode`: The number of the episode.
 * `step`: The number of the step of that episode.
 * `st`: The values of the state with the following format \[d_obs_89º, d_obs_135º, d_obs_179º, d_obs_224º, d_obs_269º] where d_obs_89º stands for the distance with an obstacle in the direction of the 89º laser beam.
-* 
+* `act`: It is the action taken in that of step of that episode. As we are going to play with the epsilon-greedy trade-off, it's interesting to know what action was taken.
+* `next_st`: It's the next state that the agent will find when it takes the action `act` from the state `st` in the step `step` of the episode `episode`. It follows the same format as `st`.
+* `rw`: It is the reward achieved taken the action `act` from the state `st`.
+* `policy_act`: It stores the action predicted by the Policy Network when it receives the state `st`. This field allows us to know what action the Policy Network would predict although the final action taken was a random action because of the epsilon-greedy trade-off.
+* `epsi`: It contains tha value of epsilon in the step `step` of the episode `episode`.
+* `policy_used`: It's a boolean value so if it's True the tha action taken in the step `step` of the episode `episode` was chosen by The Policy Network.
+An example of this data structure is:
+```
+[{"episode": 0, "step": 1, "st": [0.8, 1.1, 2.5, 1.1, 0.8], "act": 0, "next_st": [0.7, 1.1, 2.5, 1.1, 0.7], "rw": 5, "policy_act": 2, "epsi": 1.0, "policy_used": false}, {"episode": 0, "step": 2, "st": [0.7, 1.1, 2.5, 1.1, 0.7], "act": 1, "next_st": [0.7, 1.2, 2.4, 1.0, 0.7], "rw": 4, "policy_act": 2, "epsi": 0.9999887500703122, "policy_used": false}, ...]
+```
 
 
 
