@@ -304,7 +304,17 @@ Tensorboard has been used as a tool to visualize relevant information related to
 
 Periodically (`i_episode % log_interval == 0 or step_count >= num_steps`), the Policy Network will be evaluated calling the `test` method in `deepq.py`. In that function, an episode will be run using the Policy Network in eval mode and the cumulated rewards for this episode will be shown in Tensorboard and it will be possible to compare them with the cumulated rewards of previous epochs.
 
-The events files of Tensorboard will be stored in `$HOME/python3_ws/src/turtle2_openai_ros_example/src/logs/<YYYYMMDD-HHmmss>/` and they can be inspected
+The events files of Tensorboard will be stored in `$HOME/python3_ws/src/turtle2_openai_ros_example/src/logs/<YYYYMMDD-HHmmss>/`.
+
+Besides that, as a way to gather more details, a Python `namedtuple` called `Trace` (defined in the script `memory.py`) will collect the following data: 
+```
+self.Trace = namedtuple('Trace', ('episode', 'step', 'st', 'act', 'next_st', 'rw', 'policy_act', 'epsi', 'policy_used'))
+```
+The description of these fields is:
+* `episode`: The number of the episode.
+* `step`: The number of the step of that episode.
+* `st`: The values of the state with the following format \[d_obs_89º, d_obs_135º, d_obs_179º, d_obs_224º, d_obs_269º] where d_obs_89º stands for the distance with an obstacle in the direction of the 89º laser beam.
+* 
 
 
 
