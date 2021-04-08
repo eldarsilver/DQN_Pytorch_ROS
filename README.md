@@ -111,6 +111,13 @@ You can jump to the `TRAIN DQN TO SOLVE MAZE ENVIRONMENT` section to kown more a
 roslaunch turtle2_openai_ros_example start_training_maze_v2_dqn.launch
 ```
 
+You will see a lot of traces in the Docker container Terminal showing the value of each state, the action taken, the epsilon value at each step for the epsilon-greedy decision making, cumulated rewards, etc. All this information will be summarized and stored in contiguous JSON files in the `trace` folder. Each JSON file will contain the next 1000 transitions so they can be opened without memory issues.
+
+The way to launch Tensorboard and inspect the rewards and the parameters of the Policy Network during the training phase would be to open a new Terminal in the host OS where Tensorboard should be installed and execute (Tensorboard is also installed in the Docker image so you could launch it from the Docker container):
+```
+tensorboard  --logdir=$HOME/python3_ws/src/turtle2_openai_ros_example/src/logs
+```
+
 You can find the details to test the trained DQN model visualizing the results using Gazebo in the `TEST THE TRAINED MODEL IN THE OPENAI GYM AND GAZEBO ENVIRONMENT` but you can achive that running this command inside the Docker container after training the model or you can use the `dqn-final-episode-2671-step-110007.pt` file provided and placing it in the folder `/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/` of the Docker container:
 ```
 roslaunch turtle2_openai_ros_example start_test_maze_v2_dqn.launch
