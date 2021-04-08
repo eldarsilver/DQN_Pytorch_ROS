@@ -63,7 +63,7 @@ Then, you'll clone this repository:
 
 It will download a folder called `DQN_Pytorch_ROS` whose content (folders and files) has to be copied under the `python3_ws/src` folder. After that, the folder `DQN_Pytorch_ROS` has to be removed using:
 ```
-rm -R $HOME/python3_ws/src/DQN_Pytorch_ROS/
+sudo rm -R $HOME/python3_ws/src/DQN_Pytorch_ROS/
 ```
 
 The folder structure should looks like:
