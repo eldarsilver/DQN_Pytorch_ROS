@@ -75,6 +75,7 @@ The folder structure should looks like:
         turtle2_openai_ros_example/
         xacro/
 	Dockerfile
+	LICENSE
 	README.md
         requirements.txt
 ```
