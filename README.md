@@ -75,7 +75,7 @@ The folder structure should be:
 
 ### Build Dockerfile
 
-Once you are place at `python3_ws/src`, a Docker image will be built from the provided `Dockerfile` using the following command:
+Once you are placed at `python3_ws/src`, a Docker image will be built from the provided `Dockerfile` using the following command:
 ```
 docker build . -t <name_of_your_image>
 ```
@@ -94,7 +94,8 @@ After that command, you can launch the Docker image running:
 docker run -it --privileged --rm -e DISPLAY=$DISPLAY --env="QT_X11_NO_MITSHM=1" -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/logs:/python3_ws/src/turtle2_openai_ros_example/src/logs -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/checkpoints:/python3_ws/src/turtle2_openai_ros_example/src/checkpoints -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/trace:/python3_ws/src/turtle2_openai_ros_example/src/trace -p 5900:5900 -p 6006:6006 <name_of_your_image>
 ```
 
-Three volumes have been mounted between the host OS and the Docker container:
+Four volumes have been mounted between the host OS and the Docker container:
+* A volume to share the Unix domain socket file (.X11-unix) of the host X server with the Docker container. 
 * A volume to store the logs for Tensorboard events files
 * A volume to save the Pytorch Policy Network checkpoints
 * A volume to store JSON files of traces with information about the states and actions taken in each step of each episode of the training process.
@@ -103,7 +104,17 @@ Besides that, there are 2 ports mapped between the host OS and the Docker contai
 * The port 5900 on which a VNC Server will be listening to.
 * The port 6006 on which Tensorboard will be listening to.
 
+When the `docker run` has been executed, a prompt will be shown. You will be inside the Docker container using the root account. 
 
+You can jump to the `TRAIN DQN TO SOLVE MAZE ENVIRONMENT` section to kown more about this process but as a brief summary, you could train a virtual Turtlebot agent to learn a policy to solve the task in the Maze environment launching this command inside the Docker container:
+```
+roslaunch turtle2_openai_ros_example start_training_maze_v2_dqn.launch
+```
+
+You can find the details to test the trained DQN model visualizing the results using Gazebo in the `TEST THE TRAINED MODEL IN THE OPENAI GYM AND GAZEBO ENVIRONMENT` but you can achive that running this command inside the Docker container after training the model or you can use the `dqn-final-episode-2671-step-110007.pt` file provided and placing it in the folder `/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/` of the Docker container:
+```
+roslaunch turtle2_openai_ros_example start_test_maze_v2_dqn.launch
+```
 
 
 ## MANUAL INSTALLATION ON HOST OS (HARD WAY)
