@@ -130,6 +130,10 @@ You can find the details to test the trained DQN model visualizing the results u
 roslaunch turtle2_openai_ros_example start_test_maze_v2_dqn.launch
 ```
 
+As a security measure, when you have finished using the Docker container, this command should be executed:
+```
+xhost -local:root
+```
 
 ## MANUAL INSTALLATION ON HOST OS (HARD WAY)
 
