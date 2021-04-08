@@ -37,9 +37,68 @@ Each reading will be stored in a Python list of 360 positions, so in the index 0
 
 The settings of this physical Lidar will be fixed in the simulated Gym Gazebo environment (see the Gazebo 9 Installation section).
 
-## INSTALLATION
+## INSTALLATION USING DOCKER (EASY WAY)
 
-This project needs to be installed and executed in Ubuntu 16.04 because ROS Kinetic will be used to manage the robot.
+The main software components needed in this project are ROS Kinetic (used to manage the robot), OpenAI Gym with Gazebo (whose purpose is to simulate and visualize the Maze environment and the virtual robot agent with its sensors) and Pytorch to develop Neural Networks. 
+
+As each version of ROS is dependent on a specific Ubuntu distro (i.e. ROS Kinetic needs Ubuntu 16.04), and ROS works with Python 2.7 by default but we 're going to use Pytorch with Python 3, the manual installation of the software requirements directly on the host OS is tedious with many potential conflicts due to Python versions.
+
+Because of that, A Dockerfile is offered to simplify the installation process. But if you have enough patient and time available, you'll find the steps to follow to perform the installation manually.
+
+Next, you'll see how to get a functional environment with ROS Kinetic, OpenaAI Gym, Gazebo, Pytorch and Python 3.
+
+### Clone this repository
+
+The first step will be to create a workspace or folder called `python3_ws` for the entire project:
+```
+   mkdir -p python3_ws
+   cd python3_ws/
+   mkdir -p src
+   cd python3_ws/src
+```
+Then, you'll clone this repository:
+```
+   git clone <repository_url>
+```
+The folder structure should be:
+``` 
+   python3_ws/
+      src/
+        laser_values/
+        openai_ros/
+        turtle2_openai_ros_example/
+        xacro/
+	Dockerfile
+	README.md
+        requirements.txt
+```
+
+### Build Dockerfile
+
+Once you are place at `python3_ws/src`, a Docker image will be built from the provided `Dockerfile` using the following command:
+```
+docker build . -t <name_of_your_image>
+```
+
+### RUN Docker Image
+
+The built Docker Image will contain Ubuntu 16.04, ROS Kinetic, a modified version of Gazebo 9, Deep Learning libraries like Pytorch, OpenAI Gym or Tensorboard, other required packages and the `src` folder of this repo. It exposes the PORT 6006 for Tensorboard and 5900 like the PORT of a VNC Server.
+
+As Gazebo needs to open a GUI window to show the Maze environment, we'll need to allow the root user of the Docker image to access the running X server of your host Linux OS:
+```
+xhost +local:root
+```
+
+After that command, you can launch the Docker image running:
+```
+docker run -it --privileged --rm -e DISPLAY=$DISPLAY --env="QT_X11_NO_MITSHM=1" -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/logs:/python3_ws/src/turtle2_openai_ros_example/src/logs -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/checkpoints:/python3_ws/src/turtle2_openai_ros_example/src/checkpoints -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/trace:/python3_ws/src/turtle2_openai_ros_example/src/trace -p 5900:5900 -p 6006:6006 rl
+```
+
+
+
+## MANUAL INSTALLATION IN THE HOST OS (HARD WAY)
+
+This project needs to be installed and executed in Ubuntu 16.04 because ROS Kinetic will be used to control the robot.
 
 ###  Workspace folder and Virtual Environment
 
@@ -87,6 +146,8 @@ The folder structure should be:
         openai_ros/
         turtle2_openai_ros_example/
         xacro/
+	Dockerfile
+	README.md
         requirements.txt
 ```
 The configuration file `/home/eldar/python3_ws/src/turtle2_openai_ros_example/config/turtlebot2_openai_qlearn_params_v2.yaml` should be modified to indicate the correct value for the variable that stores the path to the ROS workspace (`python_ws` folder):
