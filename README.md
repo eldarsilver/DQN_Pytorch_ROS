@@ -66,6 +66,9 @@ It will download a folder called `DQN_Pytorch_ROS` whose content (folders and fi
 sudo rm -R $HOME/python3_ws/src/DQN_Pytorch_ROS/
 ```
 
+Next, you will have to download the folder called `kinetic-gazebo9` from this Google Drive url and place it under `python3_ws/src/` folder:
+[Link to kinetic-gazebo9 folder](https://drive.google.com/drive/folders/1nt_306F5p9gr2eFns0IJDbVZbJcwrAYZ?usp=sharing)
+
 The folder structure should be:
 ``` 
    python3_ws/
@@ -123,6 +126,12 @@ You will see a lot of traces in the Docker container Terminal showing the value 
 The way to launch Tensorboard and inspect the rewards and the parameters of the Policy Network during the training phase would be to open a new Terminal in the host OS where Tensorboard should be installed and execute (Tensorboard is also installed in the Docker image so you could launch it from the Docker container):
 ```
 tensorboard  --logdir=$HOME/python3_ws/src/turtle2_openai_ros_example/src/logs
+```
+
+When the training process has finished, you can assure that the Gazebo server is actually closed, looking for its pid (you have to search the gzserver entry after calling ps aux command) and killing it. You have to do that because closing the Gazebo GUI window doesn't kill the Gazebo server process:
+```
+ps aux
+kill -9 <PID of gzserver>
 ```
 
 You can find the details to test the trained DQN model visualizing the results using Gazebo in the `TEST THE TRAINED MODEL IN THE OPENAI GYM AND GAZEBO ENVIRONMENT` but you can achive that running this command inside the Docker container after training the model or you can use the `dqn-final-episode-2671-step-110007.pt` file provided and placing it in the folder `/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/` of the Docker container:
