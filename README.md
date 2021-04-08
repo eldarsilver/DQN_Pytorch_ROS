@@ -51,8 +51,8 @@ Next, you'll see how to get a functional environment with ROS Kinetic, OpenaAI G
 
 The first step will be to create a workspace or folder called `python3_ws` for the entire project:
 ```
-   mkdir -p python3_ws
-   cd python3_ws/
+   mkdir -p $HOME/python3_ws
+   cd $HOME/python3_ws/
    mkdir -p src
    cd src
 ```
@@ -60,7 +60,13 @@ Then, you'll clone this repository:
 ```
    git clone <repository_url>
 ```
-The folder structure should be:
+
+It will download a folder called `DQN_Pytorch_ROS` whose content (folders and files) have to be copied under the `python3_ws/src` folder. After that the folder `DQN_Pytorch_ROS` have to be removed using:
+```
+rm -R $HOME/python3_ws/src/DQN_Pytorch_ROS/
+```
+
+The folder structure should looks like:
 ``` 
    python3_ws/
       src/
