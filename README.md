@@ -195,7 +195,7 @@ The folder structure should be:
 	README.md
         requirements.txt
 ```
-The configuration file `/home/eldar/python3_ws/src/turtle2_openai_ros_example/config/turtlebot2_openai_qlearn_params_v2.yaml` should be modified to indicate the correct value for the variable that stores the path to the ROS workspace (`python_ws` folder):
+The configuration file `$HOME/python3_ws/src/turtle2_openai_ros_example/config/turtlebot2_openai_qlearn_params_v2.yaml` should be modified to indicate the correct value for the variable that stores the path to the ROS workspace (`python_ws` folder):
 ```
 ros_ws_abspath: "/<correct_path>/python3_ws"
 ```
