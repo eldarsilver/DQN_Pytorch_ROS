@@ -176,6 +176,11 @@ The repository should be cloned under the folder `python3_ws/src/`:
 ```
    git clone <repository_url>
 ```
+It will download a folder called `DQN_Pytorch_ROS` whose content (folders and files) has to be copied under the `python3_ws/src` folder. After that, the folder `DQN_Pytorch_ROS` has to be removed using:
+```
+sudo rm -R $HOME/python3_ws/src/DQN_Pytorch_ROS/
+```
+
 The folder structure should be:
 ``` 
    python3_ws/
@@ -186,6 +191,7 @@ The folder structure should be:
         turtle2_openai_ros_example/
         xacro/
 	Dockerfile
+	LICENSE
 	README.md
         requirements.txt
 ```
