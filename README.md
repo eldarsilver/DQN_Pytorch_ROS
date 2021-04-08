@@ -130,7 +130,7 @@ The way to launch Tensorboard and inspect the rewards and the parameters of the 
 tensorboard  --logdir=$HOME/python3_ws/src/turtle2_openai_ros_example/src/logs
 ```
 
-When the training process has finished, you can assure that the Gazebo server is actually closed, looking for its pid (you have to search the gzserver entry after calling ps aux command) and killing it. You have to do that because closing the Gazebo GUI window doesn't kill the Gazebo server process:
+When the training process has finished, you can make sure that the Gazebo server has been closed properly, looking for its pid (you have to search the gzserver entry after calling ps aux command) and killing it. You have to do that because closing the Gazebo GUI window doesn't kill the Gazebo server process:
 ```
 ps aux
 kill -9 <PID of gzserver>
