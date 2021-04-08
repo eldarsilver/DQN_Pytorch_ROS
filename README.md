@@ -80,7 +80,7 @@ Once you are place at `python3_ws/src`, a Docker image will be built from the pr
 docker build . -t <name_of_your_image>
 ```
 
-### RUN Docker Image
+### Run Docker Image
 
 The built Docker Image will contain Ubuntu 16.04, ROS Kinetic, a modified version of Gazebo 9, Deep Learning libraries like Pytorch, OpenAI Gym or Tensorboard, other required packages and the `src` folder of this repo. It exposes the PORT 6006 for Tensorboard and 5900 like the PORT of a VNC Server.
 
@@ -91,12 +91,22 @@ xhost +local:root
 
 After that command, you can launch the Docker image running:
 ```
-docker run -it --privileged --rm -e DISPLAY=$DISPLAY --env="QT_X11_NO_MITSHM=1" -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/logs:/python3_ws/src/turtle2_openai_ros_example/src/logs -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/checkpoints:/python3_ws/src/turtle2_openai_ros_example/src/checkpoints -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/trace:/python3_ws/src/turtle2_openai_ros_example/src/trace -p 5900:5900 -p 6006:6006 rl
+docker run -it --privileged --rm -e DISPLAY=$DISPLAY --env="QT_X11_NO_MITSHM=1" -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/logs:/python3_ws/src/turtle2_openai_ros_example/src/logs -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/checkpoints:/python3_ws/src/turtle2_openai_ros_example/src/checkpoints -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/trace:/python3_ws/src/turtle2_openai_ros_example/src/trace -p 5900:5900 -p 6006:6006 <name_of_your_image>
 ```
 
+Three volumes have been mounted between the host OS and the Docker container:
+* A volume to store the logs for Tensorboard events files
+* A volume to save the Pytorch Policy Network checkpoints
+* A volume to store JSON files of traces with information about the states and actions taken in each step of each episode of the training process.
+
+Besides that, there are 2 ports mapped between the host OS and the Docker container:
+* The port 5900 on which a VNC Server will be listening to.
+* The port 6006 on which Tensorboard will be listening to.
 
 
-## MANUAL INSTALLATION IN THE HOST OS (HARD WAY)
+
+
+## MANUAL INSTALLATION ON HOST OS (HARD WAY)
 
 This project needs to be installed and executed in Ubuntu 16.04 because ROS Kinetic will be used to control the robot.
 
