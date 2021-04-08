@@ -67,12 +67,14 @@ sudo rm -R $HOME/python3_ws/src/DQN_Pytorch_ROS/
 ```
 
 Next, you will have to download the folder called `kinetic-gazebo9` from this Google Drive url and place it under `python3_ws/src/` folder:
+
 [Link to kinetic-gazebo9 folder](https://drive.google.com/drive/folders/1nt_306F5p9gr2eFns0IJDbVZbJcwrAYZ?usp=sharing)
 
-The folder structure should be:
+The final folder structure should be:
 ``` 
    python3_ws/
       src/
+        kinetic-gazebo9/
         laser_values/
         openai_ros/
         turtle2_openai_ros_example/
