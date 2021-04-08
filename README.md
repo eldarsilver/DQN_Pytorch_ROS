@@ -54,7 +54,7 @@ The first step will be to create a workspace or folder called `python3_ws` for t
    mkdir -p python3_ws
    cd python3_ws/
    mkdir -p src
-   cd python3_ws/src
+   cd src
 ```
 Then, you'll clone this repository:
 ```
