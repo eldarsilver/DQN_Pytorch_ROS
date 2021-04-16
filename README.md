@@ -471,6 +471,83 @@ writer = SummaryWriter(log_dir=logdir)
 The cumulative reward of the `n_epochs` testing epochs is tracked in the `logdir` events file and it can be inspected using Tensorboard.
 
 
+## EXPERIMENTS
+
+Using the following configuration:
+```
+# Hyperparameters
+    gamma = 0.99  # discount factor
+    seed = 543  # random seed
+    log_interval = 25  # controls how often we log progress, in episodes
+    num_steps = 11e4  # number of steps to train on
+    batch_size = 512  # batch size for optimization
+    lr = 1e-4  # learning rate
+    eps_start = 1.0  # initial value for epsilon (in epsilon-greedy)
+    eps_end = 0.1  # final value for epsilon (in epsilon-greedy)
+    eps_decay = 8e4  # num_steps, length of epsilon decay, in env steps
+    target_update = 1000  # how often to update target net, in env steps
+# Rewards
+    forwards_reward: 5 # Points Given to go forwards
+    turn_reward: 2 # Points Given to turn as action
+    end_episode_points: 200 # Points given when ending an episodev
+# Angular Speed
+    angular_speed: 0.3 # Angular speed when turning Left or Right
+```
+
+You can observe these results:
+
+![Tensorboard_init_config](https://github.com/eldarsilver/DQN_Pytorch_ROS/blob/main/turtle2_openai_ros_example/src/imgs/EndTraining_initconfig.png)
+
+Using the following configuration:
+```
+# Hyperparameters
+    gamma = 0.99  # discount factor
+    seed = 543  # random seed
+    log_interval = 25  # controls how often we log progress, in episodes
+    num_steps = 11e4  # number of steps to train on
+    batch_size = 512  # batch size for optimization
+    lr = 1e-3  # learning rate
+    eps_start = 1.0  # initial value for epsilon (in epsilon-greedy)
+    eps_end = 0.1  # final value for epsilon (in epsilon-greedy)
+    eps_decay = 8e4  # num_steps, length of epsilon decay, in env steps
+    target_update = 1000  # how often to update target net, in env steps
+# Rewards
+    forwards_reward: 5 # Points Given to go forwards
+    turn_reward: 4 # Points Given to turn as action
+    end_episode_points: 200 # Points given when ending an episodev
+# Angular Speed
+    angular_speed: 0.8 # Angular speed when turning Left or Right
+```
+
+You can observe these results:
+
+![Tensorboard_init_config](https://github.com/eldarsilver/DQN_Pytorch_ROS/blob/main/turtle2_openai_ros_example/src/imgs/train_end_epochs_rw_nosparse.png)
+
+Using the following configuration:
+```
+# Hyperparameters
+    gamma = 0.999  # discount factor
+    seed = 543  # random seed
+    log_interval = 25  # controls how often we log progress, in episodes
+    num_steps = 11e4  # number of steps to train on
+    batch_size = 512  # batch size for optimization
+    lr = 1e-3  # learning rate
+    eps_start = 1.0  # initial value for epsilon (in epsilon-greedy)
+    eps_end = 0.1  # final value for epsilon (in epsilon-greedy)
+    eps_decay = 9e4  # num_steps, length of epsilon decay, in env steps
+    target_update = 1000  # how often to update target net, in env steps
+# Rewards
+    forwards_reward: 0 # Points Given to go forwards
+    turn_reward: 0 # Points Given to turn as action
+    end_episode_points: 2 # Points given when ending an episodev
+# Angular Speed
+    angular_speed: 0.8 # Angular speed when turning Left or Right
+```
+
+You can observe these results:
+
+![Tensorboard_init_config](https://github.com/eldarsilver/DQN_Pytorch_ROS/blob/main/turtle2_openai_ros_example/src/imgs/Training_sparse_rewards.png)
+
 ## DEPLOY THE TRAINED MODEL IN A REAL WORLD SCENARIO USING PHYSICAL TURTLEBOT
 
 In this step, we will have to consider 2 machines: 
