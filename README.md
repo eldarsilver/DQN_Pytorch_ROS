@@ -492,7 +492,7 @@ Using the following configuration:
     target_update = 1000  # how often to update target net, in env steps
 # Rewards
     forwards_reward: 5 # Points Given to go forwards
-    turn_reward: 2 # Points Given to turn as action
+    turn_reward: 1 # Points Given to turn as action
     end_episode_points: 200 # Points given when ending an episodev
 # Angular Speed
     angular_speed: 0.3 # Angular speed when turning Left or Right
