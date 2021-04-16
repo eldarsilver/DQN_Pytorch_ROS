@@ -33,6 +33,8 @@ A thing that needs to be clarified is that the episode ends when some of the las
 
 In this project, a RPLidar A1 has been used to capture each state of the environment. It emits 360 laser beams with 1º between 2 contiguous scans. 
 
+![lidar](https://github.com/eldarsilver/DQN_Pytorch_ROS/blob/main/turtle2_openai_ros_example/src/imgs/lidarcrop.png)
+
 Each reading will be stored in a Python list of 360 positions, so in the index 0 will be the laser beam correspondig to 0º or the robot's back side, and it follows a counter clockwise fashion. The index 89 will have the laser beam corresponding to the right side of the robot, the index 179 will contain the laser beam of the front of the robot and so on.
 
 The settings of this physical Lidar will be fixed in the simulated Gym Gazebo environment (see the Gazebo 9 Installation section).
