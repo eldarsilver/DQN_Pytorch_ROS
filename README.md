@@ -552,8 +552,8 @@ You can observe these results:
 
 ![Tensorboard_init_config](https://github.com/eldarsilver/DQN_Pytorch_ROS/blob/main/turtle2_openai_ros_example/src/imgs/Training_sparse_rewards.png)
 
+![image](https://drive.google.com/uc?export=view&id=1pFfxgGb9UF0pTjVHCQ1sQFk61AEc8Gmr)
 
-<iframe src="https://drive.google.com/file/d/1pFfxgGb9UF0pTjVHCQ1sQFk61AEc8Gmr/view?usp=sharing"></iframe>
 
 ## DEPLOY THE TRAINED MODEL IN A REAL WORLD SCENARIO USING PHYSICAL TURTLEBOT
 
