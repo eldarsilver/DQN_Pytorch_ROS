@@ -22,12 +22,12 @@ init_linear_turn_speed: 0.0 # Initial angular speed in shich we start each episo
 
 The rewards can also be found in the same file `turtlebot2_maze.yaml`:
 ```
-forwards_reward: 5 # Points Given to go forwards
-turn_reward: 4 # Points Given to turn as action
-end_episode_points: 200 # 200 Points given when ending an episode
+forwards_reward: 0 # Points Given to go forwards (5 points by default but changed to 0)
+turn_reward: 0 # Points Given to turn as action (4 points by default but changed to 0)
+end_episode_points: 2 # Points given when ending an episode (A '-' sign will be placed to this amount in the code ,i.e. -2. 200 by default but changed to 2)
 ```
 
-A thing that needs to be clarified is that the episode ends when some of the laser readings contain a value less than `min_range` and when this happens, then the reward of that step will be `- end_episode_points` (i.e. -200 points).
+A thing that needs to be clarified is that the episode ends when some of the laser readings contain a value less than `min_range` and when this happens, then the reward of that step will be `- end_episode_points` (i.e. -2 points).
 
 ## HOW TO CAPTURE EACH STATE
 
