@@ -527,7 +527,7 @@ You can observe these results:
 
 ![Tensorboard_init_config](https://github.com/eldarsilver/DQN_Pytorch_ROS/blob/main/turtle2_openai_ros_example/src/imgs/train_end_epochs_rw_nosparse.png)
 
-Using the following configuration:
+Using the following configuration (sparse rewards):
 ```
 # Hyperparameters
     gamma = 0.999  # discount factor
@@ -552,7 +552,10 @@ You can observe these results:
 
 ![Tensorboard_init_config](https://github.com/eldarsilver/DQN_Pytorch_ROS/blob/main/turtle2_openai_ros_example/src/imgs/Training_sparse_rewards.png)
 
-![image](https://drive.google.com/uc?export=view&id=1pFfxgGb9UF0pTjVHCQ1sQFk61AEc8Gmr)
+This video shows the behavior of the agent using the trained policy with sparse rewards:
+
+<img src="https://drive.google.com/uc?export=view&id=1pFfxgGb9UF0pTjVHCQ1sQFk61AEc8Gmr" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge video" />
+
 
 
 ## DEPLOY THE TRAINED MODEL IN A REAL WORLD SCENARIO USING PHYSICAL TURTLEBOT
