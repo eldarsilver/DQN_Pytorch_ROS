@@ -123,7 +123,8 @@ if __name__ == '__main__':
     #########################################################################################
     #MODEL_PATH = '$HOME/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-final-episode-2671-step-110007.pt'
     model_dir = os.path.dirname(__file__)
-    MODEL_PATH = os.path.join(model_dir, 'checkpoints/dqn-final-episode-2671-step-110007.pt')
+    #MODEL_PATH = os.path.join(model_dir, 'checkpoints/dqn-final-episode-2671-step-110007.pt')
+    MODEL_PATH = os.path.join(model_dir, 'checkpoints/dqn-sparse_reward-episode-1042-step-122000.pt')
     
 
 

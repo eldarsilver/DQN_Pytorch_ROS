@@ -105,6 +105,10 @@ def select_action(policy, state, device, env, eps_greedy_threshold, n_actions):
 def train(policy_net, target_net, optimizer, scheduler, memory, batch_size, gamma, device, env):
     if len(memory) < batch_size:
         return
+    full_memory = memory.sample(len(memory))
+    full_memory_fields = memory.Transition(*zip(*full_memory))
+    full_rewards = torch.cat(full_memory_fields.reward).float()
+    #full_states = torch.cat(full_memory_fields.state)
     transitions = memory.sample(batch_size)
     # This converts batch-array of Transitions to Transition of batch-arrays.
     # list of Transitions: [(s, a, r, s', d), (s, a, r, s', d), ...]
@@ -116,9 +120,12 @@ def train(policy_net, target_net, optimizer, scheduler, memory, batch_size, gamm
     # self.Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
     non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, batch.next_state)), device=device, dtype=torch.bool)
     non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
+    e = np.finfo(np.float32).eps.item()
     state_batch = torch.cat(batch.state)
+    #state_batch = (state_batch - full_states.mean()) / (full_states.std() + e)
     action_batch = torch.cat(batch.action)
-    reward_batch = torch.cat(batch.reward)
+    reward_batch = torch.cat(batch.reward) #.float()
+    #reward_batch = (reward_batch - full_rewards.mean()) / (full_rewards.std() + e)
 
     # Compute Q(s_t, a) - the model computes Q(s_t) for all a, then we select the columns of actions taken.
     #rospy.logwarn("state_batch.shape: ")
@@ -231,15 +238,15 @@ if __name__ == '__main__':
     """
 
     # Hyperparameters
-    gamma = 0.79  # initially 0.99 discount factor
+    gamma = 0.999  # initially 0.99 discount factor
     seed = 543  # random seed
     log_interval = 25  # controls how often we log progress, in episodes
-    num_steps = 11e4  # number of steps to train on
+    num_steps = 15e4  # 11e4 number of steps to train on
     batch_size = 512  # batch size for optimization
     lr = 1e-3  # 1e-4learning rate
     eps_start = 1.0  # initial value for epsilon (in epsilon-greedy)
     eps_end = 0.1  # final value for epsilon (in epsilon-greedy)
-    eps_decay = 8e4  # num_steps, length of epsilon decay, in env steps
+    eps_decay = 9e4  # 8e4 num_steps, length of epsilon decay, in env steps
     target_update = 1000  # how often to update target net, in env steps
     test_global_step = 0 # Global number of testing steps for tracking cummulative rewards in Tensorboard
 

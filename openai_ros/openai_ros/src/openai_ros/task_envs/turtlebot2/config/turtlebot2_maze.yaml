@@ -23,8 +23,8 @@ turtlebot2: #namespace
     middle_laser_value: 1 # Middle value
     safe_laser_value: 0 # Value considered there is an obstacle or crashed
     
-    forwards_reward: 5 # Points Given to go forwards
-    turn_reward: 4 # Points Given to turn as action
-    end_episode_points: 200 # 200 Points given when ending an episode
+    forwards_reward: 0 # 5 Points Given to go forwards
+    turn_reward: 0 # 4 Points Given to turn as action
+    end_episode_points: 2 # 200 Points given when ending an episode
     
 
