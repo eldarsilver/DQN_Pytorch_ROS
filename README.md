@@ -385,8 +385,7 @@ The Policy Network _Q_ will be updated each step with the following rule:
 $$Q(s_{t}, a_{t}) \leftarrow Q(s_{t}, a_{t}) + \alpha * (R_{t+1} + \max_{a' \in A} Q'(s_{t+1}, a') - Q(s_{t}, a_{t})$$
 ```
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=Q(s_{t},&space;a_{t})&space;\leftarrow&space;Q(s_{t},&space;a_{t})&space;&plus;&space;\alpha&space;*&space;(R_{t&plus;1}&space;&plus;&space;\max_{a'&space;\in&space;A}&space;Q'(s_{t&plus;1},&space;a')&space;-&space;Q(s_{t},&space;a_{t})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(s_{t},&space;a_{t})&space;\leftarrow&space;Q(s_{t},&space;a_{t})&space;&plus;&space;\alpha&space;*&space;(R_{t&plus;1}&space;&plus;&space;\max_{a'&space;\in&space;A}&space;Q'(s_{t&plus;1},&space;a')&space;-&space;Q(s_{t},&space;a_{t})" title="Q(s_{t}, a_{t}) \leftarrow Q(s_{t}, a_{t}) + \alpha * (R_{t+1} + \max_{a' \in A} Q'(s_{t+1}, a') - Q(s_{t}, a_{t})" /></a>
-
+![qvalue](https://github.com/eldarsilver/DQN_Pytorch_ROS/blob/main/turtle2_openai_ros_example/src/imgs/q_update.gif)
 
 The Target Network _Q'_ will copy the parameters of the Policy Network _Q_ periodically (we do that in the code each `target_update` steps which is configurable). It is set to 1000 steps by default.
 
