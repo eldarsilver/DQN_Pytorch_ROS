@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-import numpy
+import numpy 
 import time
 import math
 from gym import spaces
@@ -21,7 +21,47 @@ from std_msgs.msg import String
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 
+import torch
+import torch.nn as nn
+
 import pickle
+
+
+
+class DQN(nn.Module):
+    # hidden_size=64
+    def __init__(self, inputs, outputs, hidden_size=128):
+        super(DQN, self).__init__()
+        self.fc1 = nn.Linear(in_features=inputs, out_features=hidden_size)
+        self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(p=0.5)
+        self.bn1 = nn.BatchNorm1d(num_features=hidden_size)
+        self.bn2 = nn.BatchNorm1d(num_features=64)
+        self.bn3 = nn.BatchNorm1d(num_features=32)
+        self.fc2 = nn.Linear(in_features=hidden_size, out_features=64)
+        self.fc3 = nn.Linear(in_features=64, out_features=32)
+        self.fc4 = nn.Linear(in_features=32, out_features=outputs)
+        #self.fc5 = nn.Linear(in_features=16, out_features=outputs)
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        #x = self.dropout(x)
+        x = self.fc2(x)
+        x = self.bn2(x)
+        x = self.relu(x)
+        #x = self.dropout(x)
+        x = self.fc3(x)
+        x = self.bn3(x)
+        x = self.relu(x)
+        #x = self.dropout(x)
+        x = self.fc4(x)
+        #x = self.relu(x)
+        #x = self.dropout(x)
+        #x = self.fc5(x)
+        return x
+
 
 
 
@@ -66,9 +106,13 @@ class rlComponent(object):
 
         self.actions = range(number_actions)
 
-        self.device = torch.device('gpu' if torch.cuda.is_available() else 'cpu')
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-        self.policy = torch.load_state_dict(torch.load(MODEL_CKPT))
+        
+        self.policy = DQN(self.n_observations, number_actions).to(self.device)
+        self.policy.load_state_dict(torch.load(MODEL_CKPT, map_location=self.device))
+        self.policy.eval()
+
 
         self._cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
         self.last_action = "FORWARDS"
@@ -448,7 +492,7 @@ class rlComponent(object):
 
 
     
-    def select_action(policy, state):
+    def select_action(self, policy, state):
         #rospy.logwarn("state.shape: ")
         #rospy.logwarn(state.shape)
         with torch.no_grad():
@@ -467,7 +511,7 @@ class rlComponent(object):
         obs = [round(num, 1) for num in obs]
         rospy.loginfo("obs %s" % obs)
         while obs != [] and self._episode_done == False:
-            state = torch.from_numpy(np.array(obs)).float().unsqueeze(0).to(self.device)
+            state = torch.from_numpy(numpy.array(obs)).float().unsqueeze(0).to(self.device)
             rospy.loginfo('state %s' % state)
             # Pick an action based on the current state
             #action = qlearn.chooseAction(state)
@@ -479,7 +523,7 @@ class rlComponent(object):
                     action = 2 # right  
             else:
                 action = 0 # front   
-            rospy.logwarn("Next action is:%d", action)
+            #rospy.logwarn("Next action is:%d", action)
             rospy.logwarn("Next actionq is:%d", action_dq)
             # Execute the action in the environment and get feedback
             self._set_action(action)

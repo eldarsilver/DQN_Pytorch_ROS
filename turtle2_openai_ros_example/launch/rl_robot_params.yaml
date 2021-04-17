@@ -14,7 +14,7 @@ min_range: 0.2 # Minimum meters below wich we consider we have crashed
 max_laser_value: 6 # Value considered Ok, no wall
 min_laser_value: 0 # Value considered there is an obstacle or crashed
 
-model_ckpt: '/home/eldar/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-episode-756-step-32000.pt'
+model_ckpt: '/python3_ws/src/turtle2_openai_ros_example/src/checkpoints/dqn-sparse_reward-episode-1042-step-122000.pt'
     
 number_of_sectors: 3 # How many sectors we have
 
