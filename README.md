@@ -41,6 +41,8 @@ Each reading will be stored in a Python list of 360 positions, so in the index 0
 
 The settings of this physical Lidar will be fixed in the simulated Gym Gazebo environment (see the Gazebo 9 Installation section).
 
+An additional ROS Node called `laser_values` was created to test how the physical lidar works.
+
 ## INSTALLATION USING DOCKER (EASY WAY)
 
 The main software components needed in this project are ROS Kinetic (used to manage the robot), OpenAI Gym with Gazebo (whose purpose is to simulate and visualize the Maze environment and the virtual robot agent with its sensors) and Pytorch to develop Neural Networks. 
@@ -626,6 +628,10 @@ The way to allow that this machine is connected with the ROS Master node in the 
 The launch file `$HOME/python3_ws/src/turtle2_openai_ros_example/launch/rl_robot.launch` will call the script `$HOME/python3_ws/src/turtle2_openai_ros_example/src/deploy_robot.py` using the parameters specified in the file `$HOME/python3_ws/src/turtle2_openai_ros_example/launch/rl_robot_params.yaml`.
 
 Then you should see how the Turtlebot navigates using the states gathered by the RPLidar and predicting the next action using the trained Policy Neural Network. Find a safe place!! :P
+
+Here you can check the result:
+
+<img src="https://drive.google.com/uc?export=view&id=1X1dagzykmwJXk3F5CbgZT8g0QwqScU-Q" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge video" />
 
    
 
