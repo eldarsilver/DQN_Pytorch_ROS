@@ -631,7 +631,7 @@ Then you should see how the Turtlebot navigates using the states gathered by the
 
 Here you can check the result:
 
-<img src="https://drive.google.com/uc?export=view&id=1X1dagzykmwJXk3F5CbgZT8g0QwqScU-Q" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge video" />
+<img src="https://drive.google.com/uc?export=view&id=1X1dagzykmwJXk3F5CbgZT8g0QwqScU" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge video" />
 
    
 
