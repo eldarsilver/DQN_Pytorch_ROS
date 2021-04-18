@@ -603,6 +603,12 @@ source catkin_ws/devel/setup.bash
 export ROS_IP=<IP_Turtlebot>
 roslaunch rplidar_ros rplidar.launch
 ```
+3. Terminal 3:
+```
+source catkin_ws/devel/setup.bash
+export ROS_IP=<IP_Turtlebot>
+roslaunch kobuku_node minimal.launch
+```
 
 ### Laptop side
 
