@@ -629,9 +629,13 @@ The launch file `$HOME/python3_ws/src/turtle2_openai_ros_example/launch/rl_robot
 
 Then you should see how the Turtlebot navigates using the states gathered by the RPLidar and predicting the next action using the trained Policy Neural Network. Find a safe place!! :P
 
-Here you can check the result:
+You can view a video of the Policy deployment on a physical Turtlebot by clicking the following Google Drive link:
 
-<a data-fancybox data-type="iframe" data-src="https://drive.google.com/file/d/1dpZqDUzW6vsqmayRQmd0T99YXOTztvl-/view?usp=sharing" href="javascript:;">
+[Deploy model on the real Robot Video](https://drive.google.com/file/d/1dueyPp0IYjmycHFGKuk9xz1ccxebbqBF/view?usp=sharing)
+
+
+
+
 
    
 
