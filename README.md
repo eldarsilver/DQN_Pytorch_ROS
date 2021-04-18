@@ -631,7 +631,7 @@ Then you should see how the Turtlebot navigates using the states gathered by the
 
 You can view a video of the Policy deployment on a physical Turtlebot by clicking the following Google Drive link:
 
-[Deploy model on the real Robot Video](https://drive.google.com/file/d/1dueyPp0IYjmycHFGKuk9xz1ccxebbqBF/view?usp=sharing)
+[Model Deployment on the physical Robot Video](https://drive.google.com/file/d/1dueyPp0IYjmycHFGKuk9xz1ccxebbqBF/view?usp=sharing)
 
 
 
