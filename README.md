@@ -107,7 +107,7 @@ xhost +local:root
 
 After that command, you can launch the Docker image running:
 ```
-docker run -it --privileged --rm -e DISPLAY=$DISPLAY --env="QT_X11_NO_MITSHM=1" -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/logs:/python3_ws/src/turtle2_openai_ros_example/src/logs -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/checkpoints:/python3_ws/src/turtle2_openai_ros_example/src/checkpoints -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/trace:/python3_ws/src/turtle2_openai_ros_example/src/trace -p 5900:5900 -p 6006:6006 <name_of_your_image>
+docker run -it --privileged --net=host --rm -e DISPLAY=$DISPLAY --env="QT_X11_NO_MITSHM=1" -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/logs:/python3_ws/src/turtle2_openai_ros_example/src/logs -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/checkpoints:/python3_ws/src/turtle2_openai_ros_example/src/checkpoints -v $HOME/python3_ws/src/turtle2_openai_ros_example/src/trace:/python3_ws/src/turtle2_openai_ros_example/src/trace -p 11311:11311 -p 5900:5900 -p 6006:6006 <name_of_your_image>
 ```
 
 Four volumes have been mounted between the host OS and the Docker container:
@@ -116,9 +116,10 @@ Four volumes have been mounted between the host OS and the Docker container:
 * A volume to save the Pytorch Policy Network checkpoints
 * A volume to store JSON files of traces with information about the states and actions taken in each step of each episode of the training process.
 
-Besides that, there are 2 ports mapped between the host OS and the Docker container:
+Besides that, there are 3 ports mapped between the host OS and the Docker container:
 * The port 5900 on which a VNC Server will be listening to.
 * The port 6006 on which Tensorboard will be listening to.
+* The port 11311 on which the ROS Master node will be listening to (needed to deploy the trained model in physical robot and the ROS Master node is placed at the robot)
 
 When the `docker run` has been executed, a prompt will be shown. You will be inside the Docker container using the root account. 
 
