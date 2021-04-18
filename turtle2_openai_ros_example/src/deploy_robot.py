@@ -114,7 +114,7 @@ class rlComponent(object):
         self.policy.eval()
 
 
-        self._cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+        self._cmd_vel_pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=1)
         self.last_action = "FORWARDS"
       
         self.laser_scan = None
@@ -256,10 +256,10 @@ class rlComponent(object):
     def _is_done(self, observations):
 
         if self._episode_done:
-            rospy.logdebug("TurtleBot2 is Too Close to wall==>" +
+            rospy.logdebug("TurtleBot2 is Too Close to wall" +
                            str(self._episode_done))
         else:
-            rospy.logerr("TurtleBot2 is Ok ==>")
+            rospy.logerr("TurtleBot2 is Ok")
 
         return self._episode_done
 
@@ -340,7 +340,7 @@ class rlComponent(object):
             else:
                 rospy.logwarn("NOT done Validation >>> data.ranges[item]=" + str(data.ranges[item])+"< "+str(self.min_range))
 
-        rospy.logdebug("Size of observations, discretized_ranges==>"+str(len(discretized_ranges))) 
+        #rospy.logdebug("Size of observations, discretized_ranges==>"+str(len(discretized_ranges))) 
 
         return discretized_ranges       
         """
@@ -437,7 +437,10 @@ class rlComponent(object):
         cmd_vel_value = Twist()
         cmd_vel_value.linear.x = linear_speed
         cmd_vel_value.angular.z = angular_speed
-        rospy.logdebug("TurtleBot2 Base Twist Cmd>>" + str(cmd_vel_value))
+        rospy.logwarn("Move Base")
+        rospy.logwarn("linear_speed %d", linear_speed)
+        rospy.logwarn("angular_speed %d", angular_speed)
+        #rospy.logdebug("TurtleBot2 Base Twist Cmd>>" + str(cmd_vel_value))
         #self._check_publishers_connection()
         self._cmd_vel_pub.publish(cmd_vel_value)
         time.sleep(0.2)
@@ -459,35 +462,39 @@ class rlComponent(object):
         :param action: The action integer that set s what movement to do next.
         """
 
-        rospy.logdebug("Start Set Action ==>"+str(action))
+        rospy.logdebug("Start Set Action %d", action)
         # We convert the actions to speed movements to send to the parent class CubeSingleDiskEnv
         if action == 0:  # FORWARD
             linear_speed = self.linear_forward_speed
             angular_speed = 0.0
             self.last_action = "FORWARDS"
+            rospy.logwarn("Action 0 F")
         elif action == 1:  # LEFT
             linear_speed = self.linear_turn_speed
             angular_speed = self.angular_speed
             self.last_action = "TURN_LEFT"
+            rospy.logwarn("Action 1 L")
         elif action == 2:  # RIGHT
             linear_speed = self.linear_turn_speed
             angular_speed = -1*self.angular_speed
             self.last_action = "TURN_RIGHT"
+            rospy.logwarn("Action 2 R")                           
         elif self._episode_done == True: # Stop
             linear_speed = 0.0
             angular_speed = 0.0
             self.last_action = "STOP"
+            rospy.logwarn("Action end")
 
         # We tell TurtleBot2 the linear and angular speed to set to execute
-        """
+        
         self.move_base(linear_speed,
                        angular_speed,
                        epsilon=0.05,
                        update_rate=10,
                        min_laser_distance=self.min_range)
-        """
-        rospy.logdebug("END Set Action ==>"+str(action) +
-                       ", NAME="+str(self.last_action))
+        
+        #rospy.logdebug("END Set Action ==>"+str(action) +", NAME="+str(self.last_action))
+        rospy.logwarn("END Set Action %d", action)
 
 
 
@@ -514,19 +521,47 @@ class rlComponent(object):
             state = torch.from_numpy(numpy.array(obs)).float().unsqueeze(0).to(self.device)
             rospy.loginfo('state %s' % state)
             # Pick an action based on the current state
-            #action = qlearn.chooseAction(state)
             action_dq = self.select_action(self.policy, state)
-            if obs[2] < 0.2: # 180 front
-                if obs[1] < 0.2: # 120 right
-                        action = 1 # left
-                else:
-                    action = 2 # right  
-            else:
-                action = 0 # front   
-            #rospy.logwarn("Next action is:%d", action)
             rospy.logwarn("Next actionq is:%d", action_dq)
             # Execute the action in the environment and get feedback
-            self._set_action(action)
+            #self._set_action(action_dq)
+            rospy.logwarn("Start Set Action %d", action_dq)
+         
+            if action_dq == 0:  # FORWARD
+                linear_speed = self.linear_forward_speed
+                angular_speed = 0.0
+                self.last_action = "FORWARDS"
+                rospy.logwarn("linear_speed %d", linear_speed)
+                rospy.logwarn("angular_speed %d", angular_speed)
+            elif action_dq == 1:  # LEFT
+                linear_speed = self.linear_turn_speed
+                angular_speed = self.angular_speed
+                self.last_action = "TURN_LEFT"
+                rospy.logwarn("linear_speed %d", linear_speed)
+                rospy.logwarn("angular_speed %d", angular_speed)
+            elif action_dq == 2:  # RIGHT
+                linear_speed = self.linear_turn_speed
+                angular_speed = -1*self.angular_speed
+                self.last_action = "TURN_RIGHT"
+                rospy.logwarn("linear_speed %d", linear_speed)
+                rospy.logwarn("angular_speed %d", angular_speed)
+            elif self._episode_done == True: # Stop
+                linear_speed = 0.0
+                angular_speed = 0.0
+                self.last_action = "STOP"
+                rospy.logwarn("linear_speed %d", linear_speed)
+                rospy.logwarn("angular_speed %d", angular_speed)
+            # We tell TurtleBot2 the linear and angular speed to set to execute
+        
+            self.move_base(linear_speed,
+                           angular_speed,
+                           epsilon=0.05,
+                           update_rate=10,
+                           min_laser_distance=self.min_range)
+        
+            
+            rospy.logwarn("END Set Action %d", action_dq)
+
             obs = self._get_obs()
             obs = [round(num, 1) for num in obs]
              
